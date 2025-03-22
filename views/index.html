@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Client</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="control-panel">
+            <input type="text" id="sipUri" placeholder="SIP URI (e.g., sip:user@domain.com)">
+            <button id="connectBtn">Connect</button>
+            <button id="callBtn" disabled>Call</button>
+            <button id="hangupBtn" disabled>Hang Up</button>
+        </div>
+        <div class="media-container">
+            <audio id="remoteAudio" autoplay></audio>
+            <div id="status">Disconnected</div>
+        </div>
+    </div>
+    <script src="/js/sip-0.21.2.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
