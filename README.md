@@ -2,39 +2,42 @@
 
 A WebRTC client application built with SIP.js v0.21.2 for handling SIP-based audio calls through a WebSocket server.
 
-## Directory Structure
-
-```
-webrtc-client/
-├── public/
-│   ├── css/
-│   │   └── style.css          # Application styling
-│   ├── js/
-│   │   ├── app.js            # Client-side application logic
-│   │   └── sip-0.21.2.min.js # SIP.js library
-├── src/
-│   └── server.js             # Express server setup
-├── views/
-│   └── index.html            # Main application interface
-└── package.json              # Project dependencies
-```
-
 ## Features
 
-- SIP registration and authentication
+- SIP registration and authentication with automatic renewal
 - Audio calls (outbound and inbound)
 - Call controls (answer, reject, hangup)
 - Secure WebSocket (WSS) support
 - STUN/ICE support for NAT traversal
 - Real-time status updates
-- Automatic registration renewal
+- Clean, modern user interface
+
+## Directory Structure
+
+```
+webrtc-client/
+├── certs/                  # SSL certificates
+│   ├── cert.pem           # SSL certificate
+│   └── key.pem            # Private key
+├── public/                # Static files
+│   ├── css/              # Stylesheets
+│   │   └── style.css     # Main stylesheet
+│   └── js/               # JavaScript files
+│       ├── sip-0.21.2.min.js  # SIP.js library (minified)
+│       └── sip-client.js      # Client implementation
+├── src/                   # Server-side code
+│   └── server.js         # HTTPS server setup
+├── views/                # HTML templates
+│   └── index.html       # Main application interface
+└── package.json         # Project configuration
+```
 
 ## Prerequisites
 
 - Node.js installed on your system
 - A SIP server with WebSocket support
 - Modern web browser with WebRTC support
-- SSL/TLS certificates for HTTPS (required for WebRTC in production)
+- SSL/TLS certificates for HTTPS (required for WebRTC)
 
 ## Installation
 
@@ -65,24 +68,25 @@ WebRTC requires a secure context (HTTPS) to access media devices. You have three
    - Place your SSL certificate files in the `certs` directory:
      - `certs/key.pem`: Your private key
      - `certs/cert.pem`: Your SSL certificate
-   - Update the server configuration if using different filenames
 
 3. **Local Development**:
    - Use localhost (considered secure by browsers)
-   - No certificates needed when using `localhost`
+   - Access via https://localhost:3001
 
 ## Configuration
 
 ### SIP Server Settings
 
-1. **Server Configuration**:
+The application provides a user interface for configuring:
+
+1. **Connection Settings**:
    - SIP Server: Your SIP server domain
-   - WebSocket URL: WebSocket server URL (e.g., wss://sip.example.com:7443/ws)
+   - WebSocket URL: WebSocket server URL (e.g., wss://sip.example.com:8089/ws)
    - Username: Your SIP account username
    - Password: Your SIP account password
    - Display Name: Your display name (optional)
 
-2. **Registration Settings** (in sip-client.js):
+2. **Registration Options** (in sip-client.js):
    ```javascript
    registererOptions: {
        expires: 300,            // Registration expiry in seconds
@@ -98,6 +102,12 @@ media: {
     constraints: { 
         audio: true,    // Audio-only calls
         video: false    // No video support
+    },
+    remote: {
+        audio: remoteAudio  // Remote audio element
+    },
+    local: {
+        audio: localAudio   // Local audio element (muted)
     }
 }
 ```
@@ -108,11 +118,32 @@ media: {
 sessionDescriptionHandlerFactoryOptions: {
     peerConnectionConfiguration: {
         iceServers: [
-            { urls: 'stun:stun.l.google.com:19302' }
-        ]
+            { urls: 'stun:stun.l.google.com:19302' },  // Google's public STUN server
+            // Add your TURN servers here if needed
+            // {
+            //     urls: 'turn:turn.example.com:3478',
+            //     username: 'username',
+            //     credential: 'password'
+            // }
+        ],
+        iceTransportPolicy: 'all',      // Use 'relay' to force TURN
+        iceCandidatePoolSize: 0,        // Increase for faster connectivity
+        bundlePolicy: 'balanced'        // Use 'max-bundle' for better performance
     }
 }
 ```
+
+This configuration is essential for:
+- NAT traversal using STUN/TURN servers
+- ICE candidate gathering and connectivity
+- Establishing peer-to-peer connections
+- Fallback options for difficult network scenarios
+
+For production environments, it's recommended to:
+1. Use your own STUN/TURN servers
+2. Configure multiple ICE servers for redundancy
+3. Consider using a TURN server for reliable connectivity
+4. Adjust ICE parameters based on your network requirements
 
 ## Running the Application
 
@@ -136,6 +167,7 @@ sessionDescriptionHandlerFactoryOptions: {
    - Connect to the WebSocket server
    - Register with the SIP server
    - Maintain registration with periodic refreshes
+   - Update status display
 
 ### Making Calls
 
@@ -148,6 +180,7 @@ sessionDescriptionHandlerFactoryOptions: {
 ### Receiving Calls
 
 1. When receiving a call:
+   - Status will show "Incoming call..."
    - Click "Answer" to accept
    - Click "Reject" to decline
 2. Use "Hang Up" to end an active call
@@ -161,8 +194,8 @@ sessionDescriptionHandlerFactoryOptions: {
 
 2. **SIP Security**:
    - Use WSS (WebSocket Secure) for signaling
-   - Keep credentials secure
-   - Implement proper authentication
+   - Credentials are only stored in memory
+   - Registration is automatically renewed
 
 3. **Media Security**:
    - Audio is encrypted using SRTP
@@ -172,46 +205,71 @@ sessionDescriptionHandlerFactoryOptions: {
 ## Troubleshooting
 
 1. **Connection Issues**:
-   - Verify WebSocket URL format
+   - Verify WebSocket URL format (should start with wss://)
    - Check SSL certificate validity
    - Confirm SIP server is reachable
+   - Check browser console for errors
 
 2. **Registration Problems**:
    - Verify credentials
-   - Check registration status in console
+   - Check registration status in UI
    - Monitor registration refresh cycles
+   - Check server logs for authentication issues
 
 3. **Call Problems**:
    - Check audio device permissions
    - Verify ICE connectivity
    - Monitor browser console for errors
+   - Check SIP server logs
 
 4. **Media Issues**:
-   - Allow microphone access
-   - Check audio settings
+   - Allow microphone access when prompted
+   - Check browser audio settings
    - Verify STUN/TURN configuration
+   - Check audio routing settings
 
 ## Browser Support
 
+Tested and working in:
 - Google Chrome (recommended)
 - Mozilla Firefox
 - Microsoft Edge
 - Safari
 
-## Development Notes
+## Development
 
-1. **Code Structure**:
-   - `server.js`: HTTPS server setup
-   - `sip-client.js`: SIP client implementation
-   - `index.html`: User interface
-   - `style.css`: Styling
+### Key Files
 
-2. **Key Functions**:
+1. **sip-client.js**:
+   - SIP.js implementation
+   - Call handling
+   - Registration management
+   - Event handling
+
+2. **server.js**:
+   - HTTPS server
+   - Static file serving
+   - SSL certificate handling
+
+3. **index.html**:
+   - User interface
+   - Audio elements
+   - Control buttons
+   - Status display
+
+### Key Functions
+
+1. **Connection Management**:
    - `connect()`: Establish connection
+   - `disconnect()`: Clean disconnection
    - `register()`: SIP registration
    - `unregister()`: SIP unregistration
+
+2. **Call Management**:
    - `makeCall()`: Initiate calls
-   - `answer()`: Handle incoming calls
+   - `answer()`: Answer incoming calls
+   - `reject()`: Reject incoming calls
+   - `hangup()`: End active calls
 
 3. **Event Handling**:
    - Connection events
