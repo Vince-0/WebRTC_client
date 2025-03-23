@@ -32,17 +32,23 @@
             </div>
         </div>
         <div class="control-panel">
-            <input type="text" id="sipUri" placeholder="Destination SIP URI (e.g., sip:user@domain.com)">
-            <button id="connectBtn">Connect</button>
-            <button id="callBtn" disabled>Call</button>
-            <button id="hangupBtn" disabled>Hang Up</button>
+            <div class="form-group destination-input">
+                <label for="sipUri">Destination:</label>
+                <input type="text" id="sipUri" placeholder="1002@open-stock.bnr.la" required>
+                <small class="form-text">Enter destination address (e.g., 1002@open-stock.bnr.la)</small>
+            </div>
+            <div class="button-group">
+                <button id="connectBtn">Connect</button>
+                <button id="callBtn" disabled>Call</button>
+                <button id="hangupBtn" disabled>Hang Up</button>
+            </div>
         </div>
         <div class="media-container">
             <audio id="remoteAudio" autoplay></audio>
             <div id="status">Disconnected</div>
         </div>
     </div>
-    <script src="/js/sip-0.21.2.min.js"></script>
+    <script src="/js/sip-0.21.2.js"></script>
     <script src="/js/app.js"></script>
 </body>
 </html>
