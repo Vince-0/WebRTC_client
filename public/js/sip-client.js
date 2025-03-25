@@ -30,6 +30,7 @@ const elements = {
 // SIP.js client state
 let simpleUser = null;
 let userAgent = null;
+let currentCall = null; // Store the current call session
 
 // Initialize the application
 function init() {
@@ -152,7 +153,8 @@ async function connect() {
 
         // Add event listeners
         simpleUser.delegate = {
-            onCallReceived: () => {
+            onCallReceived: (session) => {
+                currentCall = session; // Store the incoming call session
                 updateCallStatus('Incoming call...');
                 elements.answerBtn.disabled = false;
                 elements.rejectBtn.disabled = false;
@@ -165,6 +167,7 @@ async function connect() {
             },
             onCallHangup: () => {
                 updateCallStatus('Call ended');
+                currentCall = null; // Clear the call session
                 resetCallState();
             },
             onServerConnect: async () => {
@@ -180,6 +183,7 @@ async function connect() {
                 updateStatus('Disconnected from server');
                 updateButtonState(false);
                 resetCallState();
+                currentCall = null; // Clear the call session
             },
             onRegistered: () => {
                 updateStatus('Registered');
@@ -310,7 +314,10 @@ async function makeCall() {
 // Answer incoming call
 async function answer() {
     try {
-        await simpleUser.answer();
+        if (!currentCall) {
+            throw new Error('No incoming call to answer');
+        }
+        await currentCall.accept();
         updateCallStatus('Call connected');
         elements.hangupBtn.disabled = false;
         elements.answerBtn.disabled = true;
@@ -319,15 +326,20 @@ async function answer() {
         console.error('Answer error:', error);
         updateCallStatus(`Failed to answer: ${error.message}`);
         resetCallState();
+        currentCall = null;
     }
 }
 
 // Reject incoming call
 async function reject() {
     try {
-        await simpleUser.reject();
+        if (!currentCall) {
+            throw new Error('No incoming call to reject');
+        }
+        await currentCall.reject();
         updateCallStatus('Call rejected');
         resetCallState();
+        currentCall = null;
     } catch (error) {
         console.error('Reject error:', error);
         updateCallStatus(`Failed to reject: ${error.message}`);
@@ -337,9 +349,14 @@ async function reject() {
 // Hang up active call
 async function hangup() {
     try {
-        await simpleUser.hangup();
+        if (currentCall) {
+            await currentCall.terminate();
+        } else {
+            await simpleUser.hangup();
+        }
         updateCallStatus('Call ended');
         resetCallState();
+        currentCall = null;
     } catch (error) {
         console.error('Hangup error:', error);
         updateCallStatus(`Failed to hang up: ${error.message}`);
