@@ -2,6 +2,7 @@
 
 A WebRTC client application built with SIP.js v0.21.2 for handling SIP-based audio calls through a WebSocket server.
 
+
 ## Features
 
 - SIP registration and authentication with automatic renewal
@@ -11,6 +12,11 @@ A WebRTC client application built with SIP.js v0.21.2 for handling SIP-based aud
 - STUN/ICE support for NAT traversal
 - Real-time status updates
 - Clean, modern user interface
+
+<p align="center">
+<img src="https://github.com/Vince-0/WebRTC_client/blob/b13e2ac81a3157616f54b9af136da798dfaa6452/Screenshot%202025-03-25%20215643.png" />
+</p>
+
 
 ## Directory Structure
 
