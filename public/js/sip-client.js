@@ -153,8 +153,9 @@ async function connect() {
 
         // Add event listeners
         simpleUser.delegate = {
-            onCallReceived: (session) => {
-                currentCall = session; // Store the incoming call session
+            onCallReceived: () => {
+                console.log('Incoming call received');
+                currentCall = true; // Just mark that we have an incoming call
                 updateCallStatus('Incoming call...');
                 elements.answerBtn.disabled = false;
                 elements.rejectBtn.disabled = false;
@@ -167,7 +168,7 @@ async function connect() {
             },
             onCallHangup: () => {
                 updateCallStatus('Call ended');
-                currentCall = null; // Clear the call session
+                currentCall = null;
                 resetCallState();
             },
             onServerConnect: async () => {
@@ -183,7 +184,7 @@ async function connect() {
                 updateStatus('Disconnected from server');
                 updateButtonState(false);
                 resetCallState();
-                currentCall = null; // Clear the call session
+                currentCall = null;
             },
             onRegistered: () => {
                 updateStatus('Registered');
@@ -314,10 +315,11 @@ async function makeCall() {
 // Answer incoming call
 async function answer() {
     try {
+        console.log('Answering call, currentCall:', currentCall);
         if (!currentCall) {
             throw new Error('No incoming call to answer');
         }
-        await currentCall.accept();
+        await simpleUser.answer();
         updateCallStatus('Call connected');
         elements.hangupBtn.disabled = false;
         elements.answerBtn.disabled = true;
@@ -336,7 +338,7 @@ async function reject() {
         if (!currentCall) {
             throw new Error('No incoming call to reject');
         }
-        await currentCall.reject();
+        await simpleUser.reject();
         updateCallStatus('Call rejected');
         resetCallState();
         currentCall = null;
