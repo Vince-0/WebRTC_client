@@ -1,6 +1,6 @@
 # WebRTC SIP Client Application
 
-A WebRTC client application built with SIP.js v0.21.2 for handling SIP-based audio calls through a WebSocket server.
+A WebRTC client application built with [SIP.js](https://sipjs.com/]v0.21.2) for handling SIP-based audio calls through a WebSocket server.
 
 
 ## Features
