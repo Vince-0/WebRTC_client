@@ -2,6 +2,7 @@
 
 A WebRTC client application built with [SIP.js](https://sipjs.com/]v0.21.2) for handling SIP-based audio calls through a WebSocket server.
 
+Connects to a WebSocket server like this FreeSWITCH configuration: https://github.com/Vince-0/FreeSWITCH_WEBRTC
 
 ## Features
 
@@ -11,7 +12,6 @@ A WebRTC client application built with [SIP.js](https://sipjs.com/]v0.21.2) for 
 - Secure WebSocket (WSS) support
 - STUN/ICE support for NAT traversal
 - Real-time status updates
-- Clean, modern user interface
 
 <p align="center">
 <img src="https://github.com/Vince-0/WebRTC_client/blob/b13e2ac81a3157616f54b9af136da798dfaa6452/Screenshot%202025-03-25%20215643.png" />
@@ -43,7 +43,6 @@ webrtc-client/
 - Node.js installed on your system
 - A SIP server with WebSocket support
 - Modern web browser with WebRTC support
-- SSL/TLS certificates for HTTPS (required for WebRTC)
 
 ## Installation
 
@@ -285,4 +284,4 @@ Tested and working in:
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the [MIT License](https://mit-license.org/). 
