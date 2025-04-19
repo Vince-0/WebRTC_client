@@ -1,0 +1,11 @@
+WORKFLOW: Use the .augment/task-list.txt as a task list to read COMPLETE, PENDING, and NEW tasks with associated categories for example: UX. I will update the task list as needed.
+
+WORKFLOW: Copy all of the Augment chat outputinto the .augment/augment-chathistory file at the end of every chat output summary. Include all code change checkpoint numbers so that it can be referred to easily from the task-list.txt file in the CODECHANGE: tag at the end of every task description.
+
+WORKFLOW: Number each set of code changes in the chat history exaclty like checkpoints so that we can refer to them in the task-list.txt file, for example: UX:Task description and instructions:CODECHANGE:1,4,6,10.
+
+WORKFLOW: Update .augment/README file so it explains the project features, directory structure, prerequisites, installation, configuration details, usage, key files and key functions after each code change. Include any information that could be useful for users,developers and LLMs/AI to understand the project enough to be able to start developing it by just reading the README file.
+
+WORKFLOW: Ask any questions about implementing features that could elaborate and clarify the task description.
+
+WORKFLOW: Suggest any changes to the code files and folder structure to better separate code into logical boundaries that help create better maintenance and good coding practices as well as keeping file line count down.

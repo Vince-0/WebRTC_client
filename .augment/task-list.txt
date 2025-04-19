@@ -1,0 +1,12 @@
+#STATUS:COMPLETE:
+
+
+#STATUS:PENDING:
+WORKFLOW: Explain what the workflow is for this project given the augment-guidlines in the file.
+
+#STATUS:NEW:
+WORKFLOW: Read the files in the .augment folder: README to understand what this project does and how it works, task-list.txt to understand how tasks are handled and agument-chathistory to understand any conversation history.
+UX:
+INFRA:
+BUG: 
+
