@@ -1,5 +1,9 @@
 # WebRTC SIP Client Application
 
+Author [https://github.com/Vince-0](https://github.com/Vince-0/Projects)
+
+Use at your own risk.
+
 A WebRTC client application built with [SIP.js](https://sipjs.com/]v0.21.2) for handling SIP-based audio calls through a WebSocket server.
 
 Connects to a WebSocket server like this FreeSWITCH configuration: https://github.com/Vince-0/FreeSWITCH_WEBRTC
